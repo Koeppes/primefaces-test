@@ -5,7 +5,8 @@
 	xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
 	xmlns:jsf="http://xmlns.jcp.org/jsf"
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
-	xmlns:p="http://primefaces.org/ui">
+      xmlns:pgrid="http://java.sun.com/jsf/composite/pgrid"
+      xmlns:p="http://primefaces.org/ui">
 
     <h:head>
         <title>PrimeFaces Test</title>
@@ -14,9 +15,37 @@
     </h:head>
     <h:body>
 
+
         <h1>#{testView.string}</h1>
         <h:form id="frmTest">
-            
+            <p:commandButton value="Show Print Dialog Dynamic"
+                             action="#{testView.showPrintDialogDynamic}"></p:commandButton>
+            <p:commandButton value="Show Print Dialog"
+                             action="#{testView.showPrintDialog}"></p:commandButton>
+            <div class="card">
+                <pgrid:dialogPrintDokumentDynamic widgetVar="calendarPrintDialogDynamicWV"
+                                                  printBean="#{testView}"
+                                                  id="calendarPrintDialogDynamic"/>
+                <pgrid:dialogPrintDokument widgetVar="calendarPrintDialogWV"
+                                           id="calendarPrintDialog"/>
+            </div>
+
+
+            <p:remoteCommand name="rc" action="#{testView.hideDialog()}"></p:remoteCommand>
+            <p:commandButton value="Show Dialog" action="#{testView.showDialog()}"></p:commandButton>
+            <p:dialog header="Dialog" closable="true" closeOnEscape="false"
+                      id="myDlg" widgetVar="myDlgWV" modal="true"
+                      dynamic="true" width="35%" position="center">
+                <p:commandButton id="download" style="margin-right: 5px;" oncomplete="rc()"
+                                 value="Print" icon="pi pi-print" styleClass="mr-2" ajax="true">
+                    <p:fileDownload value="#{testView.download()}"/>
+                </p:commandButton>
+
+                <p:commandButton id="CloseBtn" immediate="true"
+                                 value="Close"
+                                 action="#{testView.hideDialog()}">
+                </p:commandButton>
+            </p:dialog>
         </h:form>
 
     </h:body>
